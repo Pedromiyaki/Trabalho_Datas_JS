@@ -1,49 +1,46 @@
-function encontrarDataMaior(data1, data2) {
-    if (data1 > data2) {
-      return data1;
-    } else {
-      return data2;
-    }
-  }
+// Função para retornar o parâmetro maior entre dois objetos Date
+function parametroMaior(date1, date2) {
+    return date1 > date2 ? date1 : date2;
+}
 
-  function calcularDiferencaDeDatas(dataInicio, dataFim) {
-    if (dataInicio > dataFim) {
-      throw new Error("A data inicial deve ser anterior à data final");
+// Função para calcular o intervalo entre duas datas, garantindo que a primeira seja sempre mais antiga
+function calcularIntervaloEntreDatas(dataAntiga, dataNova) {
+    if (dataAntiga > dataNova) {
+        return "Erro: A primeira data deve ser mais antiga que a segunda.";
     }
-  
-    const diferencaEmMilisegundos = dataFim.getTime() - dataInicio.getTime();
-    const diferencaEmSegundos = diferencaEmMilisegundos / 1000;
-    const diferencaEmMinutos = diferencaEmSegundos / 60;
-    const diferencaEmHoras = diferencaEmMinutos / 60;
-    const diferencaEmDias = diferencaEmHoras / 24;
-  
-    return {
-      dias: Math.floor(diferencaEmDias),
-      horas: Math.floor(diferencaEmHoras % 24),
-      minutos: Math.floor(diferencaEmMinutos % 60),
-      segundos: Math.floor(diferencaEmSegundos % 60)
-    };
-  }
-  
-  function formatarDataAtual() {
-    const dataAtual = new Date();
-    const horas = dataAtual.getHours().toString().padStart(2, "0");
-    const minutos = dataAtual.getMinutes().toString().padStart(2, "0");
-    const dia = dataAtual.getDate().toString().padStart(2, "0");
-    const mes = (dataAtual.getMonth() + 1).toString().padStart(2, "0");
-    const ano = dataAtual.getFullYear();
-  
-    return `${horas}:${minutos} - ${dia}/${mes}/${ano}`;
-  }
 
-  function formatarDataAtual() {
+    const intervaloMs = dataNova.getTime() - dataAntiga.getTime();
+    const intervaloDias = intervaloMs / (1000 * 60 * 60 * 24);
+    return intervaloDias;
+}
+
+// Função para retornar a data atual no formato desejado
+function formatarDataAtual() {
     const dataAtual = new Date();
-    const horas = dataAtual.getHours().toString().padStart(2, "0");
-    const minutos = dataAtual.getMinutes().toString().padStart(2, "0");
-    const dia = dataAtual.getDate().toString().padStart(2, "0");
-    const mes = (dataAtual.getMonth() + 1).toString().padStart(2, "0"); 
+    const hora = pad(dataAtual.getHours());
+    const minuto = pad(dataAtual.getMinutes());
+    const dia = pad(dataAtual.getDate());
+    const mes = pad(dataAtual.getMonth() + 1); // Meses começam do zero
     const ano = dataAtual.getFullYear();
-  
-    return `${horas}:${minutos} - ${dia}/${mes}/${ano}`;
-  }
-    
+    return `${hora}:${minuto} - ${dia}/${mes}/${ano}`;
+}
+
+// Função utilitária para garantir que os números tenham dois dígitos
+function pad(numero) {
+    return numero < 10 ? '0' + numero : numero;
+}
+
+// Exemplo de uso das funções
+const data1 = new Date('2024-05-09');
+const data2 = new Date('2024-05-12');
+
+console.log("O parâmetro maior é:", parametroMaior(data1, data2));
+
+const intervalo = calcularIntervaloEntreDatas(data1, data2);
+if (typeof intervalo === "number") {
+    console.log("O intervalo entre as datas é de", intervalo, "dias.");
+} else {
+    console.log(intervalo);
+}
+
+console.log("Data formatada atual:", formatarDataAtual());
